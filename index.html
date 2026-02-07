@@ -121,6 +121,92 @@
             width: 100%;
         }
 
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--primary);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 3px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(26, 26, 46, 0.98);
+            z-index: 999;
+            padding: 6rem 2rem 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-menu li {
+            margin: 2rem 0;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu.active li {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu.active li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active li:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active li:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active li:nth-child(4) { transition-delay: 0.4s; }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent-light);
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -703,9 +789,12 @@
                 padding: 1rem;
             }
 
+            .hamburger {
+                display: flex;
+            }
+
             .nav-links {
-                gap: 1rem;
-                font-size: 0.85rem;
+                display: none;
             }
 
             .hero {
@@ -758,8 +847,23 @@
                 <li><a href="#team">Team</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#features" class="mobile-link">Product</a></li>
+            <li><a href="#pricing" class="mobile-link">Pricing</a></li>
+            <li><a href="#team" class="mobile-link">Team</a></li>
+            <li><a href="#contact" class="mobile-link">Contact</a></li>
+        </ul>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -950,7 +1054,7 @@
             </div>
 
             <div class="contact-content">
-                <a href="mailto:SilentSync@gmail.com" class="contact-email">SilentSync@gmail.com</a>
+                <a href="/cdn-cgi/l/email-protection#fdae9491989389ae84939ebd9a909c9491d39e9290" class="contact-email"><span class="__cf_email__" data-cfemail="3c6f55505952486f45525f7c5b515d5550125f5351">[email&#160;protected]</span></a>
 
                 <div class="stats-grid">
                     <div class="stat-item">
@@ -968,8 +1072,8 @@
                 </div>
                 
                 <div class="cta-group">
-                    <a href="mailto:SilentSync@gmail.com?subject=Investment Inquiry" class="btn btn-primary">Investment Inquiry</a>
-                    <a href="mailto:SilentSync@gmail.com?subject=Join Waitlist" class="btn btn-secondary">Join Waitlist</a>
+                    <a href="/cdn-cgi/l/email-protection#8cdfe5e0e9e2f8dff5e2efccebe1ede5e0a2efe3e1b3fff9eee6e9eff8b1c5e2fae9fff8e1e9e2f8acc5e2fdf9e5fef5" class="btn btn-primary">Investment Inquiry</a>
+                    <a href="/cdn-cgi/l/email-protection#abf8c2c7cec5dff8d2c5c8ebccc6cac2c785c8c4c694d8dec9c1cec8df96e1c4c2c58bfccac2dfc7c2d8df" class="btn btn-secondary">Join Waitlist</a>
                 </div>
             </div>
         </div>
@@ -980,7 +1084,7 @@
         <p>&copy; 2026 SilentSync. Reducing Noise. Improving Lives.</p>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1032,6 +1136,36 @@
             }
         });
 
+        // Hamburger menu functionality
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when clicking a link
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Close menu when clicking outside
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
         // Add active state to nav links on scroll
         const sections = document.querySelectorAll('section[id]');
         const navLinks = document.querySelectorAll('.nav-links a');
@@ -1041,18 +1175,4 @@
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.style.color = '';
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.style.color = 'var(--accent)';
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+                if (scrollY >= (sectionTop
